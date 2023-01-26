@@ -1,9 +1,9 @@
 const express = require('express');
 const validateInputLogin = require('./middlewares/validateInputLogin');
-const { loginController } = require('./controllers');
+const { loginController, userController } = require('./controllers');
 const validateInputCreate = require('./middlewares/validateInputCreate');
 const validateEmailCreate = require('./middlewares/validateEmailCreate');
-
+const authToken = require('./middlewares/authToken');
 // ...
 
 const app = express();
@@ -18,6 +18,8 @@ loginController.create);
 app.post('/login', 
 validateInputLogin, 
 loginController.sucessLogin);
+
+app.get('/user', authToken, userController.getAll);
 
 // ...
 
