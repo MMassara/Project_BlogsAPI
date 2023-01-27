@@ -20,6 +20,7 @@ validateInputLogin,
 loginController.sucessLogin);
 
 app.get('/user', authToken, userController.getAll);
+app.get('/user/:id', authToken, userController.getUserById);
 
 // ...
 
