@@ -26,6 +26,7 @@ app.post('/categories',
 authToken, 
 validateInputName, 
 categoryController.create);
+app.get('/categories', authToken, categoryController.getAll);
 
 // ...
 

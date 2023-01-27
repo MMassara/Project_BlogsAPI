@@ -1,5 +1,11 @@
 const { categoriesService } = require('../services');
 
+const getAll = async (req, res) => {
+    const allCategories = await categoriesService.getAll();
+
+    res.status(200).json(allCategories);
+};
+
 const create = async (req, res) => {
     const { name } = req.body;
 
@@ -12,4 +18,5 @@ const create = async (req, res) => {
 
 module.exports = {
     create,
+    getAll,
 };
