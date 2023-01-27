@@ -1,9 +1,10 @@
 const express = require('express');
 const validateInputLogin = require('./middlewares/validateInputLogin');
-const { loginController, userController } = require('./controllers');
+const { loginController, userController, categoryController } = require('./controllers');
 const validateInputCreate = require('./middlewares/validateInputCreate');
 const validateEmailCreate = require('./middlewares/validateEmailCreate');
 const authToken = require('./middlewares/authToken');
+const validateInputName = require('./middlewares/validateInputName');
 // ...
 
 const app = express();
@@ -21,6 +22,10 @@ loginController.sucessLogin);
 
 app.get('/user', authToken, userController.getAll);
 app.get('/user/:id', authToken, userController.getUserById);
+app.post('/categories', 
+authToken, 
+validateInputName, 
+categoryController.create);
 
 // ...
 
