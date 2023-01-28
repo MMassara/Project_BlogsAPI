@@ -7,23 +7,18 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false,
         },
         title: {
-            type: DataTypes.STRING,
-            allowNull: false, 
+            type: DataTypes.STRING, 
         }, 
         content: {
             type: DataTypes.STRING,
-            allowNull: false, 
         },
         userId: {
             type: DataTypes.STRING,
-            allowNull: false, 
         },
         published: {
-            type: DataTypes.DATE,
-            allowNull: false,  
+            type: DataTypes.DATE,  
         },
         updated: {
-            allowNull: false,
             type: DataTypes.DATE
         }
     }, 

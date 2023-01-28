@@ -1,6 +1,9 @@
 const express = require('express');
 const validateInputLogin = require('./middlewares/validateInputLogin');
-const { loginController, userController, categoryController } = require('./controllers');
+const { loginController, 
+    userController, 
+    categoryController, 
+    postsController } = require('./controllers');
 const validateInputCreate = require('./middlewares/validateInputCreate');
 const validateEmailCreate = require('./middlewares/validateEmailCreate');
 const authToken = require('./middlewares/authToken');
@@ -21,12 +24,18 @@ validateInputLogin,
 loginController.sucessLogin);
 
 app.get('/user', authToken, userController.getAll);
+
 app.get('/user/:id', authToken, userController.getUserById);
+
 app.post('/categories', 
 authToken, 
 validateInputName, 
 categoryController.create);
+
 app.get('/categories', authToken, categoryController.getAll);
+app.get('/post', postsController.getAll);
+
+// app.post('/post', authToken, postsController.create);
 
 // ...
 
