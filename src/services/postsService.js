@@ -18,14 +18,21 @@ const getAll = async () => {
     return allPostsByOwner;
 };
 
-// const getAll = async () => {
-//     const allPostsByOwner = await BlogPost.findAll({
-//         attributes: { exclude: ['user_id'] },
-//         include: { model: User, as: 'users', attributes: { exclude: ['password'] } } });
-            
-//     return allPostsByOwner;
-// };
+const getPostById = async (id) => {
+    const postByOwnerId = await BlogPost.findByPk(id, {
+        include: [{
+            model: User,
+            as: 'user',
+            attributes: { exclude: ['password'] },
+        }, {
+            model: Category,
+            as: 'categories',
+            through: { attributes: [] },
+        }],
+    });
 
+    return postByOwnerId;
+};
 // const createPost = async ({ title, content, categoryIds }) => {
     
 //     const userId = 1;
@@ -38,4 +45,5 @@ const getAll = async () => {
 
 module.exports = {
     getAll,
+    getPostById,
 };
