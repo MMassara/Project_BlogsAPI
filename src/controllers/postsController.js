@@ -26,8 +26,29 @@ const getPostByOwnerId = async (req, res) => {
     return res.status(200).json(allPostsByOwnerId);
 };
 
+const updatePost = async (req, res) => {
+    const { id } = req.params;
+    const { title, content } = req.body;
+    const token = req.headers.authorization;
+
+    const unauthorizedUser = { message: 'Unauthorized user' };
+
+    if (!title || !content) {
+        return res.status(400).json({ message: 'Some required fields are missing' });
+    }
+
+    const selectedPost = await postsService.updatePost(id, { title, content }, token);
+
+    if (selectedPost === false) {
+        return res.status(401).json(unauthorizedUser);
+    }
+
+    return res.status(200).json(selectedPost);
+};
+
 module.exports = {
     create,
     getAll,
     getPostByOwnerId,
+    updatePost,
 };

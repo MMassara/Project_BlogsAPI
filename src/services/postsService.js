@@ -1,5 +1,6 @@
+const jwt = require('jsonwebtoken');
+
 const { BlogPost, Category } = require('../models');
-// const { PostCategory } = require('../models');
 const { User } = require('../models');
 
 const getAll = async () => {
@@ -33,6 +34,7 @@ const getPostById = async (id) => {
 
     return postByOwnerId;
 };
+
 // const createPost = async ({ title, content, categoryIds }) => {
     
 //     const userId = 1;
@@ -43,7 +45,29 @@ const getPostById = async (id) => {
 //     return newPost;
 // };
 
+const updatePost = async (id, { title, content }, token) => {
+    const authorizedUser = await BlogPost.findByPk(id);
+    const { userId } = authorizedUser.dataValues;
+    const { email } = await jwt.decode(token);
+    const owner = await User.findOne({ where: { email } });
+    if (userId !== owner.dataValues.id) {
+        return false;
+    }
+    await BlogPost.update({ title, content }, { where: { id } });
+    const result = await BlogPost.findByPk(id, {
+        include: [{ model: User,
+            as: 'user',
+            attributes: { exclude: ['password'] },
+        }, { model: Category, 
+            as: 'categories',
+            through: { attributes: [] },
+        }],
+    });
+    return result;
+};
+
 module.exports = {
     getAll,
     getPostById,
+    updatePost,
 };
