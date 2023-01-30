@@ -2,8 +2,9 @@ const { postsService } = require('../services');
 
 const create = async (req, res) => {
     const { title, content, categoryIds } = req.body;
+    const token = req.headers.authorization;
    
-    const newPost = await postsService.createPost({ title, content, categoryIds });
+    const newPost = await postsService.createPost({ title, content, categoryIds }, token);
 
     return res.status(200).json(newPost);
 };

@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 
-const { BlogPost, Category } = require('../models');
+const { BlogPost, Category, PostCategory } = require('../models');
 const { User } = require('../models');
 
 const getAll = async () => {
@@ -35,15 +35,20 @@ const getPostById = async (id) => {
     return postByOwnerId;
 };
 
-// const createPost = async ({ title, content, categoryIds }) => {
+const createPost = async ({ title, content, categoryIds }, token) => {
+    const { email } = await jwt.decode(token);
+    const owner = await User.findOne({ where: { email } });
+
+    const userId = owner.dataValues.id;
+
+    const newPost = await BlogPost.create({ title, content, userId });
     
-//     const userId = 1;
-//     const newPost = await BlogPost.create({ userId, title, content });
+    await PostCategory.bulkCreate([{
+        categoryIds,
+    }]);
     
-//     // await PostCategory.bulkCreate(categoryIds);
-    
-//     return newPost;
-// };
+    return newPost.dataValues;
+};
 
 const updatePost = async (id, { title, content }, token) => {
     const authorizedUser = await BlogPost.findByPk(id);
@@ -70,4 +75,5 @@ module.exports = {
     getAll,
     getPostById,
     updatePost,
+    createPost,
 };

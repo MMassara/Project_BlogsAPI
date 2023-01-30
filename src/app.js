@@ -37,7 +37,7 @@ app.get('/post', authToken, postsController.getAll);
 app.get('/post/:id', authToken, postsController.getPostByOwnerId);
 app.put('/post/:id', authToken, postsController.updatePost);
 
-// app.post('/post', authToken, postsController.create);
+app.post('/post', authToken, postsController.create);
 
 // ...
 
