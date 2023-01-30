@@ -33,7 +33,7 @@ validateInputName,
 categoryController.create);
 
 app.get('/categories', authToken, categoryController.getAll);
-app.get('/post', postsController.getAll);
+app.get('/post', authToken, postsController.getAll);
 
 // app.post('/post', authToken, postsController.create);
 
