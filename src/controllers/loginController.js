@@ -4,8 +4,12 @@ const { JWT_SECRET } = process.env;
 const { loginService } = require('../services');
 
 const sucessLogin = async (req, res) => {
+    const { email } = req.body;
+
+    const id = await loginService.loginUser(email);
+
     const payload = {
-        email: req.body.email,
+        id,
     };
 
     const token = jwt.sign(payload, JWT_SECRET, {});
@@ -16,16 +20,13 @@ const sucessLogin = async (req, res) => {
 const create = async (req, res) => {
     const { displayName, email, password, image } = req.body;
 
+    const id = await loginService.createUser({ displayName, email, password, image });
+
     const payload = {
-        displayName,
-        email,
-        password,
-        image,
+        id,
     };
 
     const token = jwt.sign(payload, JWT_SECRET, {});
-
-    await loginService.createUser({ displayName, email, password, image });
 
     res.status(201).json({ token });
 };
