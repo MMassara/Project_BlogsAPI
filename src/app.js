@@ -14,6 +14,8 @@ const app = express();
 
 app.use(express.json());
 
+app.get('/post/search', authToken, postsController.getPostByTitle);
+
 app.post('/user', 
 validateInputCreate, 
 validateEmailCreate, 

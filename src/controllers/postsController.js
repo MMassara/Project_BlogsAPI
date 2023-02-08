@@ -47,9 +47,18 @@ const updatePost = async (req, res) => {
     return res.status(200).json(selectedPost);
 };
 
+const getPostByTitle = async (req, res) => {
+    const { q } = req.query;
+
+    const selectedPostByTitle = await postsService.getPostByTitle(q);
+
+    res.status(200).json(selectedPostByTitle);
+};
+
 module.exports = {
     create,
     getAll,
     getPostByOwnerId,
     updatePost,
+    getPostByTitle,
 };

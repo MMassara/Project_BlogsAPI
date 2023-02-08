@@ -1,4 +1,7 @@
 const jwt = require('jsonwebtoken');
+const Sequelize = require('sequelize');
+
+const { Op } = Sequelize;
 
 const { BlogPost, Category, PostCategory } = require('../models');
 const { User } = require('../models');
@@ -71,9 +74,31 @@ const updatePost = async (id, { title, content }, token) => {
     return result;
 };
 
+const getPostByTitle = async (text) => {
+    const selectedPost = await BlogPost.findAll({
+        where: { [Op.or]: [
+                { title: { [Op.like]: `%${text}%` } },
+                { content: { [Op.like]: `%${text}%` } },
+            ],
+        }, 
+        include: [{
+            model: User,
+            as: 'user',
+            attributes: { exclude: ['password'] },
+        }, {
+            model: Category,
+            as: 'categories',
+            through: { attributes: [] },
+        }], 
+        attributes: { exclude: ['user_id'] },
+    });
+    return selectedPost;
+};
+
 module.exports = {
     getAll,
     getPostById,
     updatePost,
     createPost,
+    getPostByTitle,
 };
