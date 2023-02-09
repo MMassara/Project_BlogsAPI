@@ -1,7 +1,12 @@
 const jwt = require('jsonwebtoken');
 const Sequelize = require('sequelize');
 
+const config = require('../config/config');
+
+const env = process.env.NODE_ENV || 'development';
+
 const { Op } = Sequelize;
+const sequelize = new Sequelize(config[env]);
 
 const { BlogPost, Category, PostCategory } = require('../models');
 const { User } = require('../models');
@@ -39,18 +44,26 @@ const getPostById = async (id) => {
 };
 
 const createPost = async ({ title, content, categoryIds }, token) => {
-    const { email } = await jwt.decode(token);
-    const owner = await User.findOne({ where: { email } });
+    const { id } = await jwt.decode(token);
+
+    const owner = await User.findOne({ where: { id } });
 
     const userId = owner.dataValues.id;
+    const t = await sequelize.transaction();
+    try {
+        const newPost = await BlogPost.create({ title, content, userId }, { transaction: t });
 
-    const newPost = await BlogPost.create({ title, content, userId });
+        const postId = newPost.dataValues.id;
+        
+        await Promise.all(categoryIds.map((categoryId) => PostCategory
+        .create({ postId, categoryId }, { transaction: t })));
+
+        await t.commit();
     
-    await PostCategory.bulkCreate([{
-        categoryIds,
-    }]);
-    
-    return newPost.dataValues;
+        return newPost.dataValues;
+    } catch (err) {
+        await t.rollback();
+    }
 };
 
 const updatePost = async (id, { title, content }, token) => {

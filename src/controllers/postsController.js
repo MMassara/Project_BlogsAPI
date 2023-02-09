@@ -6,7 +6,7 @@ const create = async (req, res) => {
    
     const newPost = await postsService.createPost({ title, content, categoryIds }, token);
 
-    return res.status(200).json(newPost);
+    return res.status(201).json(newPost);
 };
 
 const getAll = async (_req, res) => {

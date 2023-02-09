@@ -8,6 +8,8 @@ const validateInputCreate = require('./middlewares/validateInputCreate');
 const validateEmailCreate = require('./middlewares/validateEmailCreate');
 const authToken = require('./middlewares/authToken');
 const validateInputName = require('./middlewares/validateInputName');
+const validateNewPost = require('./middlewares/validateNewPost');
+
 // ...
 
 const app = express();
@@ -39,7 +41,7 @@ app.get('/post', authToken, postsController.getAll);
 app.get('/post/:id', authToken, postsController.getPostByOwnerId);
 app.put('/post/:id', authToken, postsController.updatePost);
 
-app.post('/post', authToken, postsController.create);
+app.post('/post', authToken, validateNewPost, postsController.create);
 app.delete('/user/me', authToken, userController.removeUserById);
 
 // ...

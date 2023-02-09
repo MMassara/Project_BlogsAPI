@@ -16,10 +16,12 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
         },
         published: {
-            type: DataTypes.DATE,  
+            type: DataTypes.DATE,
+            defaultValue: new Date(),  
         },
         updated: {
-            type: DataTypes.DATE
+            type: DataTypes.DATE,
+            defaultValue: new Date(),
         }
     }, 
     {
