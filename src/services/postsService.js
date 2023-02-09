@@ -69,11 +69,10 @@ const createPost = async ({ title, content, categoryIds }, token) => {
 const updatePost = async (id, { title, content }, token) => {
     const authorizedUser = await BlogPost.findByPk(id);
     const { userId } = authorizedUser.dataValues;
-    const { email } = await jwt.decode(token);
-    const owner = await User.findOne({ where: { email } });
-    if (userId !== owner.dataValues.id) {
-        return false;
-    }
+    const user = await jwt.decode(token);
+    const ownerId = user.id;
+    const owner = await User.findByPk(ownerId);
+    if (userId !== owner.dataValues.id) return false;
     await BlogPost.update({ title, content }, { where: { id } });
     const result = await BlogPost.findByPk(id, {
         include: [{ model: User,
