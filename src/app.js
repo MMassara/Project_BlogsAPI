@@ -9,6 +9,7 @@ const validateEmailCreate = require('./middlewares/validateEmailCreate');
 const authToken = require('./middlewares/authToken');
 const validateInputName = require('./middlewares/validateInputName');
 const validateNewPost = require('./middlewares/validateNewPost');
+const validatePost = require('./middlewares/validatePost');
 
 // ...
 
@@ -43,6 +44,7 @@ app.put('/post/:id', authToken, postsController.updatePost);
 
 app.post('/post', authToken, validateNewPost, postsController.create);
 app.delete('/user/me', authToken, userController.removeUserById);
+app.delete('/post/:id', authToken, validatePost, postsController.deleteById);
 
 // ...
 

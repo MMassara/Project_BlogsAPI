@@ -108,10 +108,31 @@ const getPostByTitle = async (text) => {
     return selectedPost;
 };
 
+const deletePostById = async (id, token) => {
+    const authorizedUser = await BlogPost.findByPk(id);
+    
+    const { userId } = authorizedUser.dataValues;
+
+    const user = await jwt.decode(token);
+
+    if (userId !== user.id) {
+        return false;
+    }
+
+    await BlogPost.destroy({
+        where: {
+            id,
+        },
+    });
+
+    return true;
+};
+
 module.exports = {
     getAll,
     getPostById,
     updatePost,
     createPost,
     getPostByTitle,
+    deletePostById,
 };

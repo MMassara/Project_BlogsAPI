@@ -55,10 +55,26 @@ const getPostByTitle = async (req, res) => {
     res.status(200).json(selectedPostByTitle);
 };
 
+const deleteById = async (req, res) => {
+    const { id } = req.params;
+    const token = req.headers.authorization;
+    
+    const unauthorizedUser = { message: 'Unauthorized user' };
+
+    const deletePost = await postsService.deletePostById(id, token);
+
+    if (deletePost === false) {
+        return res.status(401).json(unauthorizedUser);
+    }
+
+    return res.status(204).end();
+};
+
 module.exports = {
     create,
     getAll,
     getPostByOwnerId,
     updatePost,
     getPostByTitle,
+    deleteById,
 };
