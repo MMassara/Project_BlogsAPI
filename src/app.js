@@ -18,33 +18,29 @@ const app = express();
 app.use(express.json());
 
 app.get('/post/search', authToken, postsController.getPostByTitle);
+app.get('/post', authToken, postsController.getAll);
+app.get('/post/:id', authToken, postsController.getPostByOwnerId);
+app.put('/post/:id', authToken, postsController.updatePost);
+app.post('/post', authToken, validateNewPost, postsController.create);
+app.delete('/post/:id', authToken, validatePost, postsController.deleteById);
 
 app.post('/user', 
 validateInputCreate, 
 validateEmailCreate, 
 loginController.create);
+app.get('/user', authToken, userController.getAll);
+app.get('/user/:id', authToken, userController.getUserById);
+app.delete('/user/me', authToken, userController.removeUserById);
 
 app.post('/login', 
 validateInputLogin, 
 loginController.sucessLogin);
 
-app.get('/user', authToken, userController.getAll);
-
-app.get('/user/:id', authToken, userController.getUserById);
-
 app.post('/categories', 
 authToken, 
 validateInputName, 
 categoryController.create);
-
 app.get('/categories', authToken, categoryController.getAll);
-app.get('/post', authToken, postsController.getAll);
-app.get('/post/:id', authToken, postsController.getPostByOwnerId);
-app.put('/post/:id', authToken, postsController.updatePost);
-
-app.post('/post', authToken, validateNewPost, postsController.create);
-app.delete('/user/me', authToken, userController.removeUserById);
-app.delete('/post/:id', authToken, validatePost, postsController.deleteById);
 
 // ...
 
