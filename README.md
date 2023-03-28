@@ -6,4 +6,4 @@ Para rodar o projeto em sua máquina com docker, digite o comando docker-compose
 
 Para rodar o projeto sem docker, basta digitar o comando npm install no terminal do diretório.
 
-Estou aberto à quaisquer dicas e feedbacks!
+Estou aberto a quaisquer dicas e feedbacks!
